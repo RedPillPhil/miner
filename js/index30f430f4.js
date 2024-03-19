@@ -147,7 +147,7 @@ var app = new Vue({
   console.log('proportion:', proportion);
   const token0Value = Math.floor(reserve0) * proportion;
   console.log('token0value:', token0Value);
-  const token0ValueWithDecimals = parseFloat(token0Value).toFixed(6);
+  const token0ValueWithDecimals = parseFloat(token0Value).toFixed(2);
   console.log('token0value with deci:', token0ValueWithDecimals);
         
 

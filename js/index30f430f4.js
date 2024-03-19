@@ -143,7 +143,7 @@ var app = new Vue({
   const proportion = userBalance / totalSupply;
   const token1Value = reserve1 * proportion;
   const token1ValueWithDecimals = parseFloat(token1Value).toFixed(6);
-        
+       console.log('LP dollar Value:', token1ValueWithDecimals); 
 
   // Get ERC20 token balance
   let balance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();

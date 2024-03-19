@@ -138,7 +138,7 @@ var app = new Vue({
   const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
 
   const totalSupply = await erc20Contract.methods.totalSupply().call();
-  const userBalance = await erc20Contract.methods.balanceOf(userWalletAddress).call();
+  const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
   const reserve1 = await erc20Contract.methods.token1().call(); // Adjust this based on your LP token contract's method
   const proportion = userBalance / totalSupply;
   const token1Value = reserve1 * proportion;

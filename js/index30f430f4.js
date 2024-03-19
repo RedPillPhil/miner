@@ -187,7 +187,7 @@ console.log('Formatted token1 value:', formattedToken1Value);
           console.log('hatcheryMiners:', hatcheryMiners)
           console.log('getBalance:', getBalance)
           console.log('getMyEggs:', getMyEggs)
-          this.getBalance = parseFloat(getBalance / 1e18).toFixed(4)
+          this.getBalance = parseFloat(getBalance).toFixed(6)
           this.hatcheryMiners = hatcheryMiners
           this.getMyEggs = getMyEggs
           if (getMyEggs > 0) {

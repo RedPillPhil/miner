@@ -142,7 +142,7 @@ var app = new Vue({
   const reserve1 = await erc20Contract.methods.token1().call(); // Adjust this based on your LP token contract's method
   const proportion = userBalance / totalSupply;
   console.log('proportion:', proportion);
-  const token1Value = reserve1 * proportion;
+  const token1Value = Math.floor(reserve1) * proportion;
   const token1ValueWithDecimals = parseFloat(token1Value).toFixed(6);
         
 

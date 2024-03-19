@@ -147,7 +147,7 @@ var app = new Vue({
   console.log('proportion:', proportion);
   const token0Value = Math.floor(reserve0) * proportion;
   console.log('token0value:', token0Value);
-  const token0ValueWithDecimals = parseFloat(token0Value).toFixed(4);
+  const token0ValueWithDecimals = parseFloat(token0Value).toFixed(2);
   console.log('token0value with deci:', token0ValueWithDecimals);
         
 
@@ -158,7 +158,7 @@ var app = new Vue({
   if (balance == 0) {
     this.balance = balance;
   } else {
-    this.balance = parseFloat(token0ValueWithDecimals); // Assuming 18 decimal places
+    this.balance = token0ValueWithDecimals; // Assuming 18 decimal places
   }
 
 

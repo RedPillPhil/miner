@@ -153,6 +153,9 @@ var app = new Vue({
 
   const token1ValueWithDecimals = parseFloat(token1ValueX2).toFixed(2);
   console.log('token1value with deci:', token1ValueWithDecimals);
+  const formattedToken1Value = token1ValueWithDecimals.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+console.log('Formatted token1 value:', formattedToken1Value);
         
 
   // Get ERC20 token balance
@@ -162,7 +165,7 @@ var app = new Vue({
   if (balance == 0) {
     this.balance = balance;
   } else {
-    this.balance = token1ValueWithDecimals; // Assuming 18 decimal places
+    this.balance = formattedToken1Value; // Assuming 18 decimal places
   }
 
 

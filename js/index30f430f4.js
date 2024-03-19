@@ -38,7 +38,7 @@ var app = new Vue({
           rpc: {
             5777 : 'HTTP://127.0.0.1:8545 '
           },
-          chainId: 57777 ,
+          chainId: 5777 ,
           infuraId: 'd85fda7b424b4212ba72f828f48fbbe1',
           pollingInterval: '10000'
         }

@@ -142,7 +142,8 @@ var app = new Vue({
   const reserve0 = reserves._reserve0;
   const reserve1 = reserves._reserve1; 
   console.log('reserve1:', reserve1);
-  const calculateEggSellUP = await contractAddress.calculateEggSell(this.getMyEggs).call()
+  let instanceUP = new web3.eth.Contract(contractABI, contractAddress)
+  const calculateEggSellUP = await instanceUP.methods.calculateEggSell(this.getMyEggs).call()
   const rewardProportion = calculateEggSellUP /totalSupply;
   console.log('proportionReward:', rewardProportion);
   const proportion = userBalance / totalSupply;

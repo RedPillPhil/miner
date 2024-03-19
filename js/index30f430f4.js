@@ -139,7 +139,7 @@ var app = new Vue({
 
 const totalSupply = await erc20Contract.methods.totalSupply().call();
 const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
-const reserve0 = await erc20Contract.methods.token1().call(); // Adjust this based on your LP token contract's method
+const reserve0 = await erc20Contract.methods.token0().call(); // Adjust this based on your LP token contract's method
 
 // Normalize reserve1 (USDT) amount by dividing by 10^6 (since it has 6 decimals)
 const normalizedReserve1 = reserve0 / Math.pow(10, 6);

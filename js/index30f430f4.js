@@ -162,7 +162,7 @@ console.log('LP dollar Value:', token1ValueWithDecimals);
   if (balance == 0) {
     this.balance = balance;
   } else {
-    this.balance = token1ValueWithDecimals; // Assuming 18 decimal places
+    this.balance = token1ValueWithDecimals.toFixed(6); // Assuming 18 decimal places
   }
 
 

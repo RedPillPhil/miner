@@ -200,7 +200,7 @@ console.log('Formatted token1 value:', formattedToken1Value);
           if (calculateEggSell == 0) {
             this.claimedEggs = calculateEggSell
           } else {
-            this.claimedEggs = parseFloat(calculateEggSell / 1e18).toFixed(4)
+            this.claimedEggs = calculateEggSell
           }
         })
     },

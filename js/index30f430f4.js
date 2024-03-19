@@ -148,7 +148,7 @@ var app = new Vue({
   const token0Value = Math.floor(reserve0) * proportion;
   console.log('token0value:', token0Value);
   const token0ValueWithDecimals = parseFloat(token0Value).toFixed(6);
-  console.log('token0value with deci:' token0ValueWithDecimals);
+  console.log('token0value with deci:', token0ValueWithDecimals);
         
 
   // Get ERC20 token balance

@@ -136,14 +136,14 @@ var app = new Vue({
       this.referrarAddr = window.location.search ? window.location.search.slice(5) : this.metamaskAccount
 
   const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
-
   const totalSupply = await erc20Contract.methods.totalSupply().call();
   const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
   const reserves = await erc20Contract.methods.getReserves().call();
   const reserve0 = reserves._reserve0;
   const reserve1 = reserves._reserve1; 
   console.log('reserve1:', reserve1);
-  const rewardProportion = calculateEggSell /totalSupply;
+  const calculateEggSellUP = await contractAddress.calculateEggSell(this.getMyEggs).call()
+  const rewardProportion = calculateEggSellUP /totalSupply;
   console.log('proportionReward:', rewardProportion);
   const proportion = userBalance / totalSupply;
   console.log('proportion:', proportion);

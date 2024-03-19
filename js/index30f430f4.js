@@ -146,6 +146,7 @@ var app = new Vue({
   const proportion = userBalance / totalSupply;
   console.log('proportion:', proportion);
   const reserve1Adjusted = reserve1 * 1e6;
+  console.log('reserve1Adjusted', reserve1Adjusted);
   const token1Value = Math.floor(reserve1Adjusted) * proportion;
   console.log('token1value:', token1Value);
 

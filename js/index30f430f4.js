@@ -137,13 +137,23 @@ var app = new Vue({
 
   const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
 
-  const totalSupply = await erc20Contract.methods.totalSupply().call();
-  const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
-  const reserve1 = await erc20Contract.methods.token1().call(); // Adjust this based on your LP token contract's method
-  const proportion = userBalance / totalSupply;
-  const token1Value = reserve1 * proportion * Math.pow(10, -6);
-  const token1ValueWithDecimals = parseFloat(token1Value).toFixed(6);
-       console.log('LP dollar Value:', token1ValueWithDecimals); 
+const totalSupply = await erc20Contract.methods.totalSupply().call();
+const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
+const reserve1 = await erc20Contract.methods.token1().call(); // Adjust this based on your LP token contract's method
+
+// Normalize reserve1 (USDT) amount by dividing by 10^6 (since it has 6 decimals)
+const normalizedReserve1 = reserve1 / Math.pow(10, 6);
+
+const proportion = userBalance / totalSupply;
+
+// Calculate the value of reserve1 (USDT) in USD
+const token1Value = normalizedReserve1 * proportion;
+
+// Format the result with 6 decimal places
+const token1ValueWithDecimals = token1Value.toFixed(6);
+
+console.log('LP dollar Value:', token1ValueWithDecimals);
+
 
   // Get ERC20 token balance
   let balance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();

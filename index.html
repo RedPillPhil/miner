@@ -228,23 +228,24 @@ s0.parentNode.insertBefore(s1,s0);
                     <div class="mainContent">
                         <div class="box leftBox">
                             <div class="dataRow">
-                                <div class="name">Contract</div>
-                                <div class="value">{{getBalance}} LP</div>
+                                <div class="name">Contract LP Value</div>
+                                <div class="value">${{getBalance}}</div>
                             </div>
                             <div class="dataRow">
-                                <div class="name">Wallet</div>
-                                <div class="value">{{balance}} LP</div>
+                                <div class="name">Wallet LP Value</div>
+                                <div class="value">${{balance}}</div>
                             </div>
                             <div class="dataRow">
                                 <div class="name">Your Mining Power</div>
                                 <div class="value">{{hatcheryMiners}} Mining Power</div>
                             </div>
-                            <span class="ant-input-affix-wrapper antInput">
-                                <input class="ant-input" v-model="buyAmount" type="text" value="0">
-                                <span class="ant-input-suffix">
-                                    <span class="suffix">LP</span>
-                                </span>
+                        <span class="ant-input-affix-wrapper antInput">
+                        <span class="ant-input-prefix">
+                        <span class="prefix">$</span>
                             </span>
+                <input class="ant-input" v-model="buyAmount" type="text" value="0">
+                        </span>
+
                             <button class="buyButton" @click.prevent="bakePizza">Add Mining Power</button>
                             <div class="actionWrapper">
                                 <div class="dataRow">

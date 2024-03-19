@@ -36,9 +36,9 @@ var app = new Vue({
         package: WalletConnectProvider,
         options: {
           rpc: {
-            5777 : 'HTTP://127.0.0.1:8545 '
+            1337 : 'HTTP://127.0.0.1:1923'
           },
-          chainId: 5777 ,
+          chainId: 1337 ,
           infuraId: 'd85fda7b424b4212ba72f828f48fbbe1',
           pollingInterval: '10000'
         }
@@ -121,7 +121,7 @@ var app = new Vue({
       this.web3Object = new Web3(provider)
 
       this.chainId = await this.web3Object.eth.getChainId()
-      if (this.chainId !== 5777 ) {
+      if (this.chainId !== 1337 ) {
 
         //if (this.chainId !== 97) {
         this.notify('Please Connect You Wallet to Binance Smart Chain')
@@ -146,7 +146,7 @@ var app = new Vue({
       this.readValues()
     },
     readValues() {
-      const web3 = new Web3('HTTP://127.0.0.1:8545 ')
+      const web3 = new Web3('HTTP://127.0.0.1:1923 ')
     // const web3 = new Web3('https://data-seed-prebsc-2-s1.bnbchain.org:8545')
      	
       let instance = new web3.eth.Contract(contractABI, contractAddress)

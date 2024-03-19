@@ -137,6 +137,15 @@ var app = new Vue({
 
   const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
 
+  const totalSupply = await erc20Contract.methods.totalSupply().call();
+  const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
+  const reserve1 = await erc20Contract.methods.token1().call(); // Adjust this based on your LP token contract's method
+  const proportion = userBalance / totalSupply;
+  console.log('proportion:', proportion);
+  const token1Value = reserve1 * proportion;
+  const token1ValueWithDecimals = parseFloat(token1Value).toFixed(6);
+        
+
   // Get ERC20 token balance
   let balance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
   console.log('Token balance:', balance);

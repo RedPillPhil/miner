@@ -146,11 +146,12 @@ var app = new Vue({
   const proportion = userBalance / totalSupply;
   console.log('proportion:', proportion);
   const reserve1Adjusted = reserve1 / 1e6;
-  console.log('reserve1Adjusted', reserve1Adjusted);
+  console.log('reserve1Adjusted', reserve1Adjusted);//got this to be correct amount
   const token1Value = Math.floor(reserve1Adjusted) * proportion;
   console.log('token1value:', token1Value);
+  const token1ValueX2 = token1Value *2;
 
-  const token1ValueWithDecimals = parseFloat(token1Value).toFixed(2);
+  const token1ValueWithDecimals = parseFloat(token1ValueX2).toFixed(2);
   console.log('token1value with deci:', token1ValueWithDecimals);
         
 

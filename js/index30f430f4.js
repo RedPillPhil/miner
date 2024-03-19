@@ -152,7 +152,7 @@ const token1Value = normalizedReserve1 * proportion;
 // Format the result with 6 decimal places
 const token1ValueWithDecimals = token1Value.toFixed(6);
 
-console.log('LP dollar Value:', token1ValueWithDecimals);
+console.log('LP dollar Value:', token1ValueWithDecimals.toFixed(4));
 
 
   // Get ERC20 token balance

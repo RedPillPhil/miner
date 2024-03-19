@@ -140,15 +140,17 @@ var app = new Vue({
   const totalSupply = await erc20Contract.methods.totalSupply().call();
   const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
   const reserves = await erc20Contract.methods.getReserves().call();
-  const reserve0 = reserves._reserve0; // Assuming _reserve1 represents token1
-  console.log('reserve0:', reserve0);
+  const reserve1 = reserves._reserve1; // Assuming _reserve1 represents token1
+  console.log('reserve1:', reserve1);
 
   const proportion = userBalance / totalSupply;
   console.log('proportion:', proportion);
-  const token0Value = Math.floor(reserve0) * proportion;
-  console.log('token0value:', token0Value);
-  const token0ValueWithDecimals = parseFloat(token0Value).toFixed(2);
-  console.log('token0value with deci:', token0ValueWithDecimals);
+  const reserve1Adjusted = reserve1 * 1e6;
+  const token1Value = Math.floor(reserve1Adjusted) * proportion;
+  console.log('token1value:', token1Value);
+
+  const token1ValueWithDecimals = parseFloat(token1Value).toFixed(2);
+  console.log('token1value with deci:', token1ValueWithDecimals);
         
 
   // Get ERC20 token balance
@@ -158,7 +160,7 @@ var app = new Vue({
   if (balance == 0) {
     this.balance = balance;
   } else {
-    this.balance = token0ValueWithDecimals; // Assuming 18 decimal places
+    this.balance = token1ValueWithDecimals; // Assuming 18 decimal places
   }
 
 

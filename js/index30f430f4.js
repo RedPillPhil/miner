@@ -146,7 +146,7 @@ var app = new Vue({
       this.readValues()
     },
     readValues() {
-      const web3 = new Web3('hHTTP://127.0.0.1:8545 ')
+      const web3 = new Web3('HTTP://127.0.0.1:8545 ')
     // const web3 = new Web3('https://data-seed-prebsc-2-s1.bnbchain.org:8545')
      	
       let instance = new web3.eth.Contract(contractABI, contractAddress)

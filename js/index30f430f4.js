@@ -141,7 +141,7 @@ var app = new Vue({
   const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
   const reserve1 = await erc20Contract.methods.token1().call(); // Adjust this based on your LP token contract's method
   const proportion = userBalance / totalSupply;
-  const token1Value = reserve1 * proportion;
+  const token1Value = reserve1 * proportion * Math.pow(10, -6);
   const token1ValueWithDecimals = parseFloat(token1Value).toFixed(6);
        console.log('LP dollar Value:', token1ValueWithDecimals); 
 

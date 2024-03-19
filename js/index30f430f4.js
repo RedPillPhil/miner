@@ -140,15 +140,25 @@ var app = new Vue({
   const totalSupply = await erc20Contract.methods.totalSupply().call();
   const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
   const reserves = await erc20Contract.methods.getReserves().call();
+  const reserve0 = reserves._reserve0;
   const reserve1 = reserves._reserve1; 
   console.log('reserve1:', reserve1);
+  const rewardProportion = calculateEggSell /totalSupply;
+  console.log('proportionReward:', rewardProportion);
   const proportion = userBalance / totalSupply;
   console.log('proportion:', proportion);
+  const reserve0Adjusted = reserve0 /1e6;
+  console.log('reserve0Adjusted', reserve0Adjusted);
   const reserve1Adjusted = reserve1 / 1e6;
   console.log('reserve1Adjusted', reserve1Adjusted)
+  const token0Value = Math.floor(reserve0Adjusted) * proportion;
+  console.log('token0value:', token0Value);
   const token1Value = Math.floor(reserve1Adjusted) * proportion;
   console.log('token1value:', token1Value);
+  const token0ValueX2 = token0Value *2;
   const token1ValueX2 = token1Value *2;
+  const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);
+  console.log('token0value with decimals:', token0ValueWithDecimals);
   const token1ValueWithDecimals = parseFloat(token1ValueX2).toFixed(2);
   console.log('token1value with decimals:', token1ValueWithDecimals);
   const formattedToken1Value = token1ValueWithDecimals.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -201,22 +211,8 @@ console.log('Formatted token1 value:', formattedToken1Value);
             this.claimedEggs = calculateEggSell
           }
         })
-
-  const reserve0 = reserves._reserve0;
-  console.log('reserve1:', reserve1);
-  const rewardProportion = calculateEggSell /totalSupply
-  console.log('proportionReward:', rewardProportion);
-  const reserve0Adjusted = reserve0 /1e6;
-  console.log('reserve0Adjusted', reserve0Adjusted);
-  const token0Value = Math.floor(reserve0Adjusted) * proportion;
-  console.log('token0value:', token0Value);
-  const token0ValueX2 = token0Value *2;
-  const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);
-  console.log('token0value with decimals:', token0ValueWithDecimals);
     },
      
-
-
 	  
 	  bakePizza() {
 		

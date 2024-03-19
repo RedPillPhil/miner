@@ -144,7 +144,7 @@ var app = new Vue({
   if (balance == 0) {
     this.balance = balance;
   } else {
-    this.balance = parseFloat(balance / 1e18); // Assuming 18 decimal places
+    this.balance = parseFloat(balance); // Assuming 18 decimal places
   }
 
 

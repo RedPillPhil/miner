@@ -149,8 +149,10 @@ const proportion = userBalance / totalSupply;
 // Calculate the value of reserve1 (USDT) in USD
 const token1Value = normalizedReserve1 * proportion;
 
+// Format the result with 6 decimal places
+const token1ValueWithDecimals = token1Value.toFixed(6);
 
-console.log('LP dollar Value:', token1Value.toFixed(4));
+console.log('LP dollar Value:', token1ValueWithDecimals);
 
 
   // Get ERC20 token balance

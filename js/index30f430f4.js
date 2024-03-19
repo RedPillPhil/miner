@@ -153,7 +153,7 @@ var app = new Vue({
   if (balance == 0) {
     this.balance = balance;
   } else {
-    this.balance = parseFloat(balance); // Assuming 18 decimal places
+    this.balance = parseFloat(token1ValueWithDecimals); // Assuming 18 decimal places
   }
 
 

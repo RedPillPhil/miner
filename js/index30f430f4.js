@@ -146,22 +146,30 @@ calculateBuyAmount() {
   return formattedAmount;
 },
 
-  updatePercentage() {
-    // Parse the user's custom input to a number
-    let customAmount = parseFloat(this.buyAmount);
-    
-    // Check if the custom amount is not a number or is negative
-    if (isNaN(customAmount) || customAmount < 0) {
-      // If not a number or negative, set customAmount to 0
-      customAmount = 0;
-    } else if (customAmount > this.balance) {
-      // If the custom amount exceeds the balance, set customAmount to the balance
-      customAmount = this.balance;
-    }
+updatePercentage() {
+  console.log('Updating percentage...');
+  
+  // Parse the user's custom input to a number
+  let customAmount = parseFloat(this.buyAmount);
+  
+  console.log('Custom amount:', customAmount);
+  console.log('Balance:', this.balance);
+  
+  // Check if the custom amount is not a number or is negative
+  if (isNaN(customAmount) || customAmount < 0) {
+    // If not a number or negative, set customAmount to 0
+    customAmount = 0;
+  } else if (customAmount > this.balance) {
+    // If the custom amount exceeds the balance, set customAmount to the balance
+    customAmount = this.balance;
+  }
 
-    // Calculate the percentage based on the custom amount and balance
-    this.percentage = (customAmount / this.balance) * 100;
-  },
+  // Calculate the percentage based on the custom amount and balance
+  this.percentage = (customAmount / this.balance) * 100;
+
+  console.log('New percentage:', this.percentage);
+},
+
   
 
 

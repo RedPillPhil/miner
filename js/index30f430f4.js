@@ -18,6 +18,7 @@ var app = new Vue({
       hatcheryMiners: 0,
       getMyEggs: 0,
       claimedEggs: 0,
+      token0ValueWithDecimals: 0,
       referral: window.location.href,
       referrarAddr: null,
       contractInstance: null,
@@ -212,6 +213,8 @@ async readValues(totalSupply, reserve0Adjusted) {
     const token0ValueX2 = token0Value * 2;
     const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);
     console.log('token0value with decimals:', token0ValueWithDecimals);
+    this.token0ValueWithDecimals = token0ValueWithDecimals; // Assigning value
+
   })
   .catch((error) => {
     console.error('Error fetching data:', error);

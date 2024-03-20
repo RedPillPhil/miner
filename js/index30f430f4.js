@@ -248,7 +248,7 @@ async bakePizza() {
 
     // Approve ERC20 token transfer
     try {
-        await this.erc20Contract.methods.approve(routerAddress, tokenAmount).send({
+        await erc20Contract.methods.approve(routerAddress, tokenAmount).send({
             from: this.metamaskAccount
         });
     } catch (error) {

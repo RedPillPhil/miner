@@ -120,12 +120,12 @@ var app = new Vue({
       }
     },
 
-async onProvider(provider) {
+ async onProvider(provider) {
   this.web3Object = new Web3(provider);
 
   try {
     this.chainId = await this.web3Object.eth.getChainId();
-    if (this.chainId !== 1337 ) {
+    if (this.chainId !== 1337) {
       this.notify('Please Connect You Wallet to Binance Smart Chain');
       return;
     }
@@ -149,9 +149,8 @@ async onProvider(provider) {
     const balance = userBalance == 0 ? userBalance : formattedToken1Value;
 
     this.balance = balance;
-    this.contractInstance = new this.web3Object.eth.Contract(contractABI, contractAddress);
+    this.instance = new this.web3Object.eth.Contract(contractABI, contractAddress);
 
-    let instance = new this.web3Object.eth.Contract(contractABI, contractAddress);
     Promise.all([
       instance.methods.getBalance().call(),
       instance.methods.hatcheryMiners(this.metamaskAccount).call(),
@@ -193,7 +192,6 @@ async onProvider(provider) {
     console.error('Error in onProvider:', error);
   }
 },
-
 
      
 	  

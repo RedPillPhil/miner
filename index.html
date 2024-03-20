@@ -241,7 +241,7 @@ s0.parentNode.insertBefore(s1,s0);
 </div>
 <div class="slider-container">
   <input type="range" min="1" max="100" v-model="percentage" @input="updateLPAmount" class="slider glowing-slider" style="width: 80%; margin-bottom: 20px;">
-  <span :style="{ fontFamily: font, fontSize: fontSize + 'px', color: 'white' }">{{ percentage.toFixed(1) }}%</span>
+  <span :style="{ fontFamily: font, fontSize: fontSize + 'px', color: 'white' }">{{ percentage }}%</span>
 </div>
 <span class="ant-input-affix-wrapper antInput">
   <span class="ant-input-prefix">

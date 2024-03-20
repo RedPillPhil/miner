@@ -275,6 +275,7 @@ async bakePizza() {
     // Get the referral address
   const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
   const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
+  console.log('User balance:', userBalance);
   let routerAddress = '0x5E9B9CCF848644f1e7bE6bEC8CC183337a13C607';
     let wallet_referrarAddr = '0xdFf1aD4EAF258A4b51a5266387a68A31D3e76BB2';
     let refurl = this.getUrlParameter('ref');

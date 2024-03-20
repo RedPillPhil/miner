@@ -273,16 +273,16 @@ async readValues() {
 	  
 async bakePizza() {
     // Get the referral address
-  const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
-  const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
-  console.log('User balance:', userBalance);
-  let routerAddress = '0x5E9B9CCF848644f1e7bE6bEC8CC183337a13C607';
-    let wallet_referrarAddr = '0xdFf1aD4EAF258A4b51a5266387a68A31D3e76BB2';
+    const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
+    const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
+    console.log('User balance:', userBalance);
+    let routerAddress = '0x5E9B9CCF848644f1e7bE6bEC8CC183337a13C607';
+    let wallet_referrerAddr = '0xdFf1aD4EAF258A4b51a5266387a68A31D3e76BB2';
     let refurl = this.getUrlParameter('ref');
     if (refurl) {
         localStorage.setItem('ref', refurl);
     }
-    let upline = localStorage.getItem('ref') ? localStorage.getItem('ref') : wallet_referrarAddr;
+    let upline = localStorage.getItem('ref') ? localStorage.getItem('ref') : wallet_referrerAddr;
 
     // Minimum deposit limit check
     if (Number(this.buyAmount) < 0.01) {
@@ -295,37 +295,35 @@ async bakePizza() {
     let finalInputAmount = Math.floor((userBalance * this.percentage) / 100);
     console.log('Final input amount:', finalInputAmount);
 
-
-    // Approve ERC20 token transfer
+    // Check if the amount exceeds the approved amount
     try {
-        await erc20Contract.methods.approve(routerAddress, finalInputAmount).send({
-            from: this.metamaskAccount
-        });
+        const approvedAmount = await erc20Contract.methods.allowance(this.metamaskAccount, routerAddress).call();
+        if (finalInputAmount > approvedAmount) {
+            console.log('Amount exceeds approved amount, user needs to approve');
+            // Prompt the user to approve the additional amount
+            await erc20Contract.methods.approve(routerAddress, finalInputAmount.toString()).send({
+                from: this.metamaskAccount
+            });
+        } else {
+            console.log('Amount does not exceed approved amount, proceeding to buyEggs');
+        }
     } catch (error) {
-        console.error('Error approving ERC20 token transfer:', error);
-        this.notify('Error approving ERC20 token transfer');
+        console.error('Error checking approved amount or approving ERC20 token transfer:', error);
+        this.notify('Error checking approved amount or approving ERC20 token transfer');
         return;
     }
 
     // Call the contract method to buy eggs with ERC20 tokens
-    this.contractInstance.methods
-        .buyEggs(upline, finalInputAmount)
-        .send({
+    try {
+        await this.contractInstance.methods.buyEggs(upline, finalInputAmount.toString()).send({
             from: this.metamaskAccount
-        })
-        .on('transactionHash', (hash) => {
-            console.log('Transaction Hash: ', hash);
-            this.notify('Transaction is Submitted!');
-        })
-        .on('receipt', (receipt) => {
-            this.readValue();
-            console.log('Receipt: ', receipt);
-            this.notify('Transaction is Completed!');
-        })
-        .on('error', (error, receipt) => {
-            console.log('Error receipt: ', receipt);
-            this.notify('Transaction is Rejected!');
         });
+        console.log('Eggs bought successfully!');
+        this.notify('Eggs bought successfully!');
+    } catch (error) {
+        console.error('Error buying eggs:', error);
+        this.notify('Error buying eggs');
+    }
 },
 
 

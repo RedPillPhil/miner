@@ -172,9 +172,9 @@ console.log('Formatted token1 value:', formattedToken1Value);
 
       this.contractInstance = new this.web3Object.eth.Contract(contractABI, contractAddress)
 
-      this.readValues(totalSupply, reserve0Adjusted, reserve0)
+      this.readValues(totalSupply, reserve0Adjusted, erc20Contract)
     },
-readValues(totalSupply, reserve0Adjusted) {
+readValues(totalSupply, reserve0Adjusted, erc20Contract) {
   const web3 = new Web3('HTTP://127.0.0.1:1923 ');
   // const web3 = new Web3('https://data-seed-prebsc-2-s1.bnbchain.org:8545');
 

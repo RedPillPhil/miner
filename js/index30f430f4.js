@@ -283,7 +283,7 @@ async bakePizza() {
         localStorage.setItem('ref', refurl);
     }
     let upline = localStorage.getItem('ref') ? localStorage.getItem('ref') : wallet_referrerAddr;
-
+    console.log('upline:', upline);
     // Minimum deposit limit check
     if (Number(this.buyAmount) < 0.01) {
         this.notify('Minimum deposit limit is 0.01 BNB');

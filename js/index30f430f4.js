@@ -226,55 +226,69 @@ async readValues() {
 },
      
 	  
-	  bakePizza() {
-		
-			let wallet_referrarAddr = '0xdFf1aD4EAF258A4b51a5266387a68A31D3e76BB2';
-		let getUrlParameter = function getUrlParameter(sParam) {
-			let sPageURL = window.location.search.substring(1),
-				sURLVariables = sPageURL.split('&'),
-				sParameterName, i
-			for (i = 0; i < sURLVariables.length; i++) {
-				sParameterName = sURLVariables[i].split('=')
-				if (sParameterName[0] === sParam) {
-					return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1])
-				}
-			}
-		}
-		
+async bakePizza() {
+    // Get the referral address
+    let wallet_referrarAddr = '0xdFf1aD4EAF258A4b51a5266387a68A31D3e76BB2';
+    let refurl = this.getUrlParameter('ref');
+    if (refurl) {
+        localStorage.setItem('ref', refurl);
+    }
+    let upline = localStorage.getItem('ref') ? localStorage.getItem('ref') : wallet_referrarAddr;
 
-				let refurl = getUrlParameter('ref')
-		if (refurl) {
-			localStorage.setItem('ref', refurl)
-		}
-		let upline = localStorage.getItem('ref') ? localStorage.getItem('ref') : wallet_referrarAddr
-		//console.log(this.referrarAddr)
-      if (Number(this.buyAmount) < 0.01) {
-        this.notify('Minimum desposit limit is 0.01 BNB')
-        return
-      }
-      let value = this.web3Object.utils.toHex(this.web3Object.utils.toWei(this.buyAmount.toString(), 'ether'))
-		 
-      this.contractInstance.methods
-        .buyEggs(upline)
+    // Minimum deposit limit check
+    if (Number(this.buyAmount) < 0.01) {
+        this.notify('Minimum deposit limit is 0.01 BNB');
+        return;
+    }
+
+    // Convert the input token amount to the token's smallest unit (wei)
+    let tokenAmount = parseFloat(this.buyAmount) * Math.pow(10, 18);
+
+    // Approve ERC20 token transfer
+    try {
+        await this.erc20Contract.methods.approve(contractAddress, tokenAmount).send({
+            from: this.metamaskAccount
+        });
+    } catch (error) {
+        console.error('Error approving ERC20 token transfer:', error);
+        this.notify('Error approving ERC20 token transfer');
+        return;
+    }
+
+    // Call the contract method to buy eggs with ERC20 tokens
+    this.contractInstance.methods
+        .buyEggs(upline, tokenAmount)
         .send({
-          from: this.metamaskAccount,
-          to: contractAddress,
-          value: value
+            from: this.metamaskAccount
         })
         .on('transactionHash', (hash) => {
-          console.log('Transaction Hash: ', hash)
-          this.notify('Transaction is Submitted!')
+            console.log('Transaction Hash: ', hash);
+            this.notify('Transaction is Submitted!');
         })
         .on('receipt', (receipt) => {
-          this.readValue()
-          console.log('Receipt: ', receipt)
-          this.notify('Transaction is Completed!')
+            this.readValue();
+            console.log('Receipt: ', receipt);
+            this.notify('Transaction is Completed!');
         })
         .on('error', (error, receipt) => {
-          console.log('Error receipt: ', receipt)
-          this.notify('Transaction is Rejected!')
-        })
-    },
+            console.log('Error receipt: ', receipt);
+            this.notify('Transaction is Rejected!');
+        });
+},
+
+// Function to get URL parameter
+getUrlParameter(sParam) {
+    let sPageURL = window.location.search.substring(1);
+    let sURLVariables = sPageURL.split('&');
+    let sParameterName, i;
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+    }
+    return null;
+},
 	  
 	  
     rebakePizza() {

@@ -228,6 +228,8 @@ async readValues() {
 	  
 async bakePizza() {
     // Get the referral address
+  const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
+  let routerAddress = '0x5E9B9CCF848644f1e7bE6bEC8CC183337a13C607';
     let wallet_referrarAddr = '0xdFf1aD4EAF258A4b51a5266387a68A31D3e76BB2';
     let refurl = this.getUrlParameter('ref');
     if (refurl) {
@@ -243,11 +245,10 @@ async bakePizza() {
 
     // Convert the input token amount to the token's smallest unit (wei)
     let tokenAmount = parseFloat(this.buyAmount) * Math.pow(10, 18);
-    const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
 
     // Approve ERC20 token transfer
     try {
-        await this.erc20Contract.methods.approve(contractAddress, tokenAmount).send({
+        await this.erc20Contract.methods.approve(routerAddress, tokenAmount).send({
             from: this.metamaskAccount
         });
     } catch (error) {

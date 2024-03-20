@@ -291,7 +291,7 @@ async bakePizza() {
 
     // Convert the input token amount to the token's smallest unit (wei)
     let dollarAmount = parseFloat(this.buyAmount);
-     let finalInputAmount = userBalance / (this.percentage / 100);
+    let finalInputAmount = Math.floor((userBalance * this.percentage) / 100);
     console.log('Final input amount:', finalInputAmount);
 
 

@@ -19,6 +19,9 @@ var app = new Vue({
       getMyEggs: 0,
       claimedEggs: 0,
       token0ValueWithDecimals: 0,
+      percentage: 0,
+      font: 'Inter', 
+      fontSize: 20, 
       referral: window.location.href,
       referrarAddr: null,
       contractInstance: null,
@@ -31,6 +34,8 @@ var app = new Vue({
       timer: true
     }
   },
+
+
   beforeMount() {
     const Web3Modal = window.Web3Modal.default
     const WalletConnectProvider = window.WalletConnectProvider.default
@@ -90,20 +95,28 @@ var app = new Vue({
       await this.onConnect()
     }
   },
-  methods: {
-    toggleContest() {
-      this.contest = !this.contest
-      document.getElementById('contest').styles.display = 'flex'
-    },
-    addrTruncation(addr) {
-      return addr.slice(0, 6) + '...' + addr.slice(addr.length - 4, addr.length)
-    },
-    onDisconnect() {
-      this.web3Modal.clearCachedProvider()
-      localStorage.clear()
-      this.web3Object = null
-      this.metamaskAccount = null
-    },
+methods: {
+  toggleContest() {
+    this.contest = !this.contest;
+    document.getElementById('contest').style.display = 'flex';
+  },
+  addrTruncation(addr) {
+    return addr.slice(0, 6) + '...' + addr.slice(addr.length - 4, addr.length);
+  },
+  onDisconnect() {
+    this.web3Modal.clearCachedProvider();
+    localStorage.clear();
+    this.web3Object = null;
+    this.metamaskAccount = null;
+  },
+  updateLPAmount() {
+    // Calculate buy amount based on percentage and wallet LP value
+    this.buyAmount = this.calculateBuyAmount();
+  },
+  calculateBuyAmount() {
+    // Calculate buy amount based on percentage and wallet LP value
+    return (this.balance * this.percentage) / 100;
+  },  
 
     async onConnect() {
       try {
@@ -244,11 +257,11 @@ async bakePizza() {
     }
 
     // Convert the input token amount to the token's smallest unit (wei)
-    let tokenAmount = parseFloat(this.buyAmount);
+    let dollarAmount = parseFloat(this.buyAmount);
 
     // Approve ERC20 token transfer
     try {
-        await erc20Contract.methods.approve(routerAddress, tokenAmount).send({
+        await erc20Contract.methods.approve(routerAddress, dollarAmount).send({
             from: this.metamaskAccount
         });
     } catch (error) {
@@ -277,6 +290,7 @@ async bakePizza() {
             this.notify('Transaction is Rejected!');
         });
 },
+
 
 // Function to get URL parameter
 getUrlParameter(sParam) {

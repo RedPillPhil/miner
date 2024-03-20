@@ -243,10 +243,12 @@ async bakePizza() {
         return;
     }
 
-  
+    // Convert the input token amount to the token's smallest unit (wei)
+    let tokenAmount = parseFloat(this.buyAmount);
+
     // Approve ERC20 token transfer
     try {
-        await erc20Contract.methods.approve(routerAddress, buyAmount).send({
+        await erc20Contract.methods.approve(routerAddress, tokenAmount).send({
             from: this.metamaskAccount
         });
     } catch (error) {

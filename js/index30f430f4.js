@@ -198,9 +198,9 @@ console.log('Formatted token1 value:', formattedToken1Value);
         .then((calculateEggSell) => {
           console.log('claimedEggs:', calculateEggSell)
           if (calculateEggSell == 0) {
-            this.claimedEggs = calculateEggSell
+            this.claimedEggs = calculateEggSell;
           } else {
-            this.claimedEggs = calculateEggSell
+            this.claimedEggs = calculateEggSell;
           const rewardProportion = claimedEggs /totalSupply;
         const token0Value = Math.floor(reserve0Adjusted) * rewardProportion;
         const token0ValueX2 = token0Value *2;

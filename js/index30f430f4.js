@@ -109,14 +109,18 @@ methods: {
     this.web3Object = null;
     this.metamaskAccount = null;
   },
-  updateLPAmount() {
-    // Calculate buy amount based on percentage and wallet LP value
-    this.buyAmount = this.calculateBuyAmount();
-  },
-  calculateBuyAmount() {
-    // Calculate buy amount based on percentage and wallet LP value
-    return (this.balance * this.percentage) / 100;
-  },  
+updateLPAmount() {
+  console.log('Updating LP Amount...');
+  // Calculate buy amount based on percentage and wallet LP value
+  this.buyAmount = this.calculateBuyAmount();
+},
+calculateBuyAmount() {
+  console.log('Calculating buy amount...');
+  // Calculate buy amount based on percentage and wallet LP value
+  const calculatedAmount = (this.balance * this.percentage) / 100;
+  console.log('Calculated amount:', calculatedAmount);
+  return calculatedAmount;
+},
 
     async onConnect() {
       try {

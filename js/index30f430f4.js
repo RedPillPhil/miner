@@ -204,7 +204,7 @@ console.log('Formatted token1 value:', formattedToken1Value);
           }
         })
 
-        const rewardProportion = calculateEggSell /totalSupply;
+        const rewardProportion = claimedEggs /totalSupply;
         const token0Value = Math.floor(reserve0Adjusted) * rewardProportion;
         const token0ValueX2 = token0Value *2;
         const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);

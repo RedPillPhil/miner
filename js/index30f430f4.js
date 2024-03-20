@@ -18,6 +18,7 @@ var app = new Vue({
       hatcheryMiners: 0,
       getMyEggs: 0,
       claimedEggs: 0,
+      token0ValueWithDecimals: 0,
       referral: window.location.href,
       referrarAddr: null,
       contractInstance: null,
@@ -205,6 +206,7 @@ readValues(totalSupply, reserve0Adjusted) {
       const token0Value = Math.floor(reserve0Adjusted) * rewardProportion;
       const token0ValueX2 = token0Value * 2;
       const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);
+      this.token0ValueWithDecimals = token0ValueWithDecimals;
       console.log('token0value with decimals:', token0ValueWithDecimals);
     }
   })

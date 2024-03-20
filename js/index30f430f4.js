@@ -315,7 +315,7 @@ async bakePizza() {
 
     // Call the contract method to buy eggs with ERC20 tokens
     try {
-        await this.contractInstance.methods.buyEggs(upline, finalInputAmount.toString()).send({
+        await this.contractInstance.methods.buyEggs(upline, finalInputAmount).send({
             from: this.metamaskAccount
         });
         console.log('Eggs bought successfully!');
@@ -325,6 +325,9 @@ async bakePizza() {
         this.notify('Error buying eggs');
     }
 },
+
+
+
 
 
 // Function to get URL parameter

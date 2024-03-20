@@ -196,20 +196,23 @@ readValues(totalSupply, reserve0Adjusted) {
     }
     return 0
   })
-  .then((calculateEggSell) => {
+.then((calculateEggSell) => {
     console.log('claimedEggs:', calculateEggSell);
     this.claimedEggs = calculateEggSell; // Assign the value to claimedEggs
     if (calculateEggSell == 0) {
-      this.claimedEggs = calculateEggSell;
+        this.claimedEggs = calculateEggSell;
     } else {
-      const rewardProportion = this.claimedEggs / totalSupply;
-      const token0Value = Math.floor(reserve0Adjusted) * rewardProportion;
-      const token0ValueX2 = token0Value * 2;
-      const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);
-      this.token0ValueWithDecimals = token0ValueWithDecimals;
-      console.log('token0value with decimals:', token0ValueWithDecimals);
+        const rewardProportion = this.claimedEggs / totalSupply;
+        console.log('rewardProportion:', rewardProportion);
+        const token0Value = Math.floor(reserve0Adjusted) * rewardProportion;
+        console.log('token0Value:', token0Value);
+        const token0ValueX2 = token0Value * 2;
+        const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);
+        this.token0ValueWithDecimals = token0ValueWithDecimals;
+        console.log('token0value with decimals:', token0ValueWithDecimals);
     }
-  })
+})
+
   .catch((error) => {
     // Handle errors if any
     console.error('Error fetching data:', error);

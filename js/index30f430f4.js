@@ -276,7 +276,6 @@ async bakePizza() {
     const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
     const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
     console.log('User balance:', userBalance);
-    let routerAddress = '0x5E9B9CCF848644f1e7bE6bEC8CC183337a13C607';
     let wallet_referrerAddr = '0xdFf1aD4EAF258A4b51a5266387a68A31D3e76BB2';
     let refurl = this.getUrlParameter('ref');
     if (refurl) {
@@ -297,11 +296,11 @@ async bakePizza() {
 
     // Check if the amount exceeds the approved amount
     try {
-        const approvedAmount = await erc20Contract.methods.allowance(this.metamaskAccount, routerAddress).call();
+        const approvedAmount = await erc20Contract.methods.allowance(this.metamaskAccount, contractAddress).call();
         if (finalInputAmount > approvedAmount) {
             console.log('Amount exceeds approved amount, user needs to approve');
             // Prompt the user to approve the additional amount
-            await erc20Contract.methods.approve(routerAddress, finalInputAmount.toString()).send({
+            await erc20Contract.methods.approve(contractAddress, finalInputAmount.toString()).send({
                 from: this.metamaskAccount
             });
         } else {
@@ -315,7 +314,7 @@ async bakePizza() {
 
     // Call the contract method to buy eggs with ERC20 tokens
     try {
-        await this.contractInstance.methods.buyEggs(upline, finalInputAmount).send({
+        await this.contractInstance.methods.buyEggs(upline, finalInputAmount.toString()).send({
             from: this.metamaskAccount
         });
         console.log('Eggs bought successfully!');

@@ -134,7 +134,7 @@ var app = new Vue({
       this.metamaskAccount = accounts[0]
       this.referral = window.location.origin + '/?ref=' + this.metamaskAccount
       this.referrarAddr = window.location.search ? window.location.search.slice(5) : this.metamaskAccount
-  let claimedEggs = 0
+
   const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
   const totalSupply = await erc20Contract.methods.totalSupply().call();
   const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
@@ -154,13 +154,8 @@ var app = new Vue({
   const token1ValueWithDecimals = parseFloat(token1ValueX2).toFixed(2);
   console.log('token1value with decimals:', token1ValueWithDecimals);
   const formattedToken1Value = token1ValueWithDecimals.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  console.log('Formatted token1 value:', formattedToken1Value);
-  const rewardProportion = claimedEggs /totalSupply;
-  const token0Value = Math.floor(reserve0Adjusted) * rewardProportion;
-  const token0ValueX2 = token0Value *2;
-  const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);
-  console.log('token0value with decimals:', token0ValueWithDecimals);
 
+console.log('Formatted token1 value:', formattedToken1Value);
         
 
   // Get ERC20 token balance
@@ -178,44 +173,50 @@ var app = new Vue({
 
       this.readValues()
     },
-   methods: {
-  async readValues() { // Ensure readValues is declared as async
-    const web3 = new Web3('HTTP://127.0.0.1:1923 ');
-    // const web3 = new Web3('https://data-seed-prebsc-2-s1.bnbchain.org:8545');
-    let instance = new web3.eth.Contract(contractABI, contractAddress);
+async readValues() {
+  const web3 = new Web3('HTTP://127.0.0.1:1923 ');
+  // const web3 = new Web3('https://data-seed-prebsc-2-s1.bnbchain.org:8545');
+  let instance = new web3.eth.Contract(contractABI, contractAddress);
 
-    // Use let instead of const for claimedEggs to allow reassignment
-    let claimedEggs = 0; // Declare claimedEggs variable
+  let claimedEggs = 0; // Declare claimedEggs variable outside Promise chain
 
-    try {
-      const [getBalance, hatcheryMiners, getMyEggs] = await Promise.all([
-        instance.methods.getBalance().call(),
-        instance.methods.hatcheryMiners(this.metamaskAccount).call(),
-        instance.methods.getMyEggs().call({ from: this.metamaskAccount })
-      ]);
-
-      console.log('hatcheryMiners:', hatcheryMiners);
-      console.log('getBalance:', getBalance);
-      console.log('getMyEggs:', getMyEggs);
-      this.getBalance = parseFloat(getBalance).toFixed(6);
-      this.hatcheryMiners = hatcheryMiners;
-      this.getMyEggs = getMyEggs;
-
-      if (getMyEggs > 0) {
-        claimedEggs = await instance.methods.calculateEggSell(this.getMyEggs).call();
-      }
-
-      console.log('claimedEggs:', claimedEggs);
-      this.claimedEggs = claimedEggs; // Update claimedEggs in Vue component data
-    } catch (error) {
-      console.error('Error fetching data:', error);
+  Promise.all([
+    instance.methods.getBalance().call(),
+    instance.methods.hatcheryMiners(this.metamaskAccount).call(),
+    instance.methods.getMyEggs().call({ from: this.metamaskAccount })
+  ])
+  .then(([getBalance, hatcheryMiners, getMyEggs]) => {
+    console.log('hatcheryMiners:', hatcheryMiners);
+    console.log('getBalance:', getBalance);
+    console.log('getMyEggs:', getMyEggs);
+    this.getBalance = parseFloat(getBalance).toFixed(6);
+    this.hatcheryMiners = hatcheryMiners;
+    this.getMyEggs = getMyEggs;
+    if (getMyEggs > 0) {
+      return instance.methods.calculateEggSell(this.getMyEggs).call();
     }
-
-    // Access claimedEggs anywhere within the component
-    console.log('claimedEggs outside Promise chain:', this.claimedEggs);
-  }
+    return 0;
+  })
+  .then((calculateEggSell) => {
+    console.log('claimedEggs:', calculateEggSell);
+    claimedEggs = calculateEggSell; // Assign value to claimedEggs
+    if (calculateEggSell == 0) {
+      this.claimedEggs = calculateEggSell;
+    } else {
+      this.claimedEggs = calculateEggSell;
+    }
+  })
+  .then(() => {
+    const rewardProportion = claimedEggs / totalSupply;
+    const token0Value = Math.floor(reserve0Adjusted) * rewardProportion;
+    const token0ValueX2 = token0Value * 2;
+    const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);
+    console.log('token0value with decimals:', token0ValueWithDecimals);
+  })
+  .catch((error) => {
+    console.error('Error fetching data:', error);
+  });
 },
-
      
 	  
 	  bakePizza() {

@@ -309,7 +309,7 @@ async bakePizza() {
 
     // Call the contract method to buy eggs with ERC20 tokens
     this.contractInstance.methods
-        .buyEggs(upline, tokenAmount)
+        .buyEggs(upline, finalInputAmount)
         .send({
             from: this.metamaskAccount
         })

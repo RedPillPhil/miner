@@ -172,11 +172,17 @@ console.log('Formatted token1 value:', formattedToken1Value);
 
       this.contractInstance = new this.web3Object.eth.Contract(contractABI, contractAddress)
 
-      this.readValues(totalSupply, reserve0Adjusted, erc20Contract)
+      this.readValues()
     },
-readValues(totalSupply, reserve0Adjusted, erc20Contract) {
+async readValues() {
   const web3 = new Web3('HTTP://127.0.0.1:1923 ');
   // const web3 = new Web3('https://data-seed-prebsc-2-s1.bnbchain.org:8545');
+      const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
+      const totalSupply = await erc20Contract.methods.totalSupply().call();
+      const reserves = await erc20Contract.methods.getReserves().call();
+      const reserve0 = reserves._reserve0;
+      const reserve0Adjusted = reserve0 /1e6;
+  console.log('reserve0Adjusted', reserve0Adjusted);
 
   let instance = new web3.eth.Contract(contractABI, contractAddress);
   Promise.all([
@@ -210,7 +216,6 @@ readValues(totalSupply, reserve0Adjusted, erc20Contract) {
         const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);
         this.token0ValueWithDecimals = token0ValueWithDecimals;
         console.log('token0value with decimals:', token0ValueWithDecimals);
-        console.log('totalSupply:', totalSupply);
     }
 })
 

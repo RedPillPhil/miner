@@ -243,6 +243,7 @@ async bakePizza() {
 
     // Convert the input token amount to the token's smallest unit (wei)
     let tokenAmount = parseFloat(this.buyAmount) * Math.pow(10, 18);
+    const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
 
     // Approve ERC20 token transfer
     try {

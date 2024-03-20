@@ -120,104 +120,80 @@ var app = new Vue({
       }
     },
 
-    async onProvider(provider) {
-      this.web3Object = new Web3(provider)
+ async onProvider(provider) {
+  this.web3Object = new Web3(provider);
 
-      this.chainId = await this.web3Object.eth.getChainId()
-      if (this.chainId !== 1337 ) {
+  try {
+    this.chainId = await this.web3Object.eth.getChainId();
+    if (this.chainId !== 1337) {
+      this.notify('Please Connect You Wallet to Binance Smart Chain');
+      return;
+    }
 
-        //if (this.chainId !== 97) {
-        this.notify('Please Connect You Wallet to Binance Smart Chain')
-        return
-      }
+    let accounts = await this.web3Object.eth.getAccounts();
+    this.metamaskAccount = accounts[0];
+    this.referral = window.location.origin + '/?ref=' + this.metamaskAccount;
+    this.referrarAddr = window.location.search ? window.location.search.slice(5) : this.metamaskAccount;
 
-      let accounts = await this.web3Object.eth.getAccounts()
-      this.metamaskAccount = accounts[0]
-      this.referral = window.location.origin + '/?ref=' + this.metamaskAccount
-      this.referrarAddr = window.location.search ? window.location.search.slice(5) : this.metamaskAccount
+    const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
+    const totalSupply = await erc20Contract.methods.totalSupply().call();
+    const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
+    const reserves = await erc20Contract.methods.getReserves().call();
+    const reserve0 = reserves._reserve0;
+    const reserve1 = reserves._reserve1;
+    const proportion = userBalance / totalSupply;
+    const reserve0Adjusted = reserve0 / 1e6;
+    const token1Value = Math.floor(reserve1 / 1e6) * proportion;
+    const token1ValueWithDecimals = parseFloat(token1Value * 2).toFixed(2);
+    const formattedToken1Value = token1ValueWithDecimals.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const balance = userBalance == 0 ? userBalance : formattedToken1Value;
 
-  const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
-  const totalSupply = await erc20Contract.methods.totalSupply().call();
-  const userBalance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
-  const reserves = await erc20Contract.methods.getReserves().call();
-  const reserve0 = reserves._reserve0;
-  const reserve1 = reserves._reserve1; 
-  console.log('reserve1:', reserve1);
-  const proportion = userBalance / totalSupply;
-  console.log('proportion:', proportion);
-  const reserve0Adjusted = reserve0 /1e6;
-  console.log('reserve0Adjusted', reserve0Adjusted);
-  const reserve1Adjusted = reserve1 / 1e6;
-  console.log('reserve1Adjusted', reserve1Adjusted)
-  const token1Value = Math.floor(reserve1Adjusted) * proportion;
-  console.log('token1value:', token1Value);
-  const token1ValueX2 = token1Value *2;
-  const token1ValueWithDecimals = parseFloat(token1ValueX2).toFixed(2);
-  console.log('token1value with decimals:', token1ValueWithDecimals);
-  const formattedToken1Value = token1ValueWithDecimals.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-console.log('Formatted token1 value:', formattedToken1Value);
-        
-
-  // Get ERC20 token balance
-  let balance = await erc20Contract.methods.balanceOf(this.metamaskAccount).call();
-  console.log('Token balance:', balance);
-
-  if (balance == 0) {
     this.balance = balance;
-  } else {
-    this.balance = formattedToken1Value; // Assuming 18 decimal places
+    this.contractInstance = new this.web3Object.eth.Contract(contractABI, contractAddress);
+
+    let instance = new Web3('HTTP://127.0.0.1:1923').eth.Contract(contractABI, contractAddress);
+    Promise.all([
+      instance.methods.getBalance().call(),
+      instance.methods.hatcheryMiners(this.metamaskAccount).call(),
+      instance.methods.getMyEggs().call({ from: this.metamaskAccount })
+    ])
+    .then(([getBalance, hatcheryMiners, getMyEggs]) => {
+      console.log('hatcheryMiners:', hatcheryMiners);
+      console.log('getBalance:', getBalance);
+      console.log('getMyEggs:', getMyEggs);
+      this.getBalance = parseFloat(getBalance).toFixed(6);
+      this.hatcheryMiners = hatcheryMiners;
+      this.getMyEggs = getMyEggs;
+      if (getMyEggs > 0) {
+        return instance.methods.calculateEggSell(this.getMyEggs).call();
+      }
+      return 0;
+    })
+    .then((calculateEggSell) => {
+      console.log('claimedEggs:', calculateEggSell);
+      this.claimedEggs = calculateEggSell; // Assign the value to claimedEggs
+      if (calculateEggSell == 0) {
+          this.claimedEggs = calculateEggSell;
+      } else {
+          const rewardProportion = this.claimedEggs / totalSupply;
+          console.log('rewardProportion:', rewardProportion);
+          const token0Value = Math.floor(reserve0Adjusted) * rewardProportion;
+          console.log('token0Value:', token0Value);
+          const token0ValueX2 = token0Value * 2;
+          const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);
+          this.token0ValueWithDecimals = token0ValueWithDecimals;
+          console.log('token0value with decimals:', token0ValueWithDecimals);
+      }
+    })
+    .catch((error) => {
+      // Handle errors if any
+      console.error('Error fetching data:', error);
+    });
+  } catch (error) {
+    console.error('Error in onProvider:', error);
   }
-
-
-      this.contractInstance = new this.web3Object.eth.Contract(contractABI, contractAddress)
-
-      this.readValues(totalSupply, reserve0Adjusted)
-    },
-readValues(totalSupply, reserve0Adjusted) {
-  const web3 = new Web3('HTTP://127.0.0.1:1923 ');
-  // const web3 = new Web3('https://data-seed-prebsc-2-s1.bnbchain.org:8545');
-
-  let instance = new web3.eth.Contract(contractABI, contractAddress);
-  Promise.all([
-    instance.methods.getBalance().call(),
-    instance.methods.hatcheryMiners(this.metamaskAccount).call(),
-    instance.methods.getMyEggs().call({ from: this.metamaskAccount })
-  ])
-  .then(([getBalance, hatcheryMiners, getMyEggs]) => {
-    console.log('hatcheryMiners:', hatcheryMiners);
-    console.log('getBalance:', getBalance);
-    console.log('getMyEggs:', getMyEggs);
-    this.getBalance = parseFloat(getBalance).toFixed(6);
-    this.hatcheryMiners = hatcheryMiners;
-    this.getMyEggs = getMyEggs;
-    if (getMyEggs > 0) {
-      return instance.methods.calculateEggSell(this.getMyEggs).call()
-    }
-    return 0
-  })
-.then((calculateEggSell) => {
-    console.log('claimedEggs:', calculateEggSell);
-    this.claimedEggs = calculateEggSell; // Assign the value to claimedEggs
-    if (calculateEggSell == 0) {
-        this.claimedEggs = calculateEggSell;
-    } else {
-        const rewardProportion = this.claimedEggs / totalSupply;
-        console.log('rewardProportion:', rewardProportion);
-        const token0Value = Math.floor(reserve0Adjusted) * rewardProportion;
-        console.log('token0Value:', token0Value);
-        const token0ValueX2 = token0Value * 2;
-        const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);
-        this.token0ValueWithDecimals = token0ValueWithDecimals;
-        console.log('token0value with decimals:', token0ValueWithDecimals);
-    }
-})
-
-  .catch((error) => {
-    // Handle errors if any
-    console.error('Error fetching data:', error);
-  });
 },
+
      
 	  
 	  bakePizza() {

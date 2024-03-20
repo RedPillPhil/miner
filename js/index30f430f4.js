@@ -275,12 +275,12 @@ async bakePizza() {
     // Get the referral address
     const erc20Contract = new this.web3Object.eth.Contract(erc20ABI, erc20Address);
     let routerAddress = '0x5E9B9CCF848644f1e7bE6bEC8CC183337a13C607';
-    let wallet_referrarAddr = '0xdFf1aD4EAF258A4b51a5266387a68A31D3e76BB2';
+    let wallet_referrerAddr = '0xdFf1aD4EAF258A4b51a5266387a68A31D3e76BB2';
     let refurl = this.getUrlParameter('ref');
     if (refurl) {
         localStorage.setItem('ref', refurl);
     }
-    let upline = localStorage.getItem('ref') ? localStorage.getItem('ref') : wallet_referrarAddr;
+    let upline = localStorage.getItem('ref') ? localStorage.getItem('ref') : wallet_referrerAddr;
 
     // Minimum deposit limit check
     if (Number(this.buyAmount) < 0.01) {
@@ -298,6 +298,13 @@ async bakePizza() {
         return;
     }
     console.log('Percentage:', this.percentage);
+
+    // Check if balance is a valid number
+    if (isNaN(this.balance)) {
+        console.error('Invalid balance:', this.balance);
+        return;
+    }
+    console.log('Balance:', this.balance);
 
     // Calculate the final input amount
     let finalInputAmount = this.balance / (this.percentage / 100);
@@ -322,21 +329,21 @@ async bakePizza() {
 
     // Call the contract method to buy eggs with ERC20 tokens
     this.contractInstance.methods
-        .buyEggs(upline, tokenAmount)
+        .buyEggs(upline, finalInputAmount)
         .send({
             from: this.metamaskAccount
         })
         .on('transactionHash', (hash) => {
-            console.log('Transaction Hash: ', hash);
+            console.log('Transaction Hash:', hash);
             this.notify('Transaction is Submitted!');
         })
         .on('receipt', (receipt) => {
             this.readValue();
-            console.log('Receipt: ', receipt);
+            console.log('Receipt:', receipt);
             this.notify('Transaction is Completed!');
         })
         .on('error', (error, receipt) => {
-            console.log('Error receipt: ', receipt);
+            console.log('Error receipt:', receipt);
             this.notify('Transaction is Rejected!');
         });
 },

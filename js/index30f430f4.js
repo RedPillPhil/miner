@@ -120,8 +120,21 @@ calculateBuyAmount() {
   console.log('Calculating buy amount...');
   console.log('Balance:', this.balance);
   console.log('Percentage:', this.percentage);
+
+  // Remove commas from balance
+  const balanceWithoutCommas = this.balance.replace(/,/g, '');
+
+  // Parse balance to float
+  const balanceFloat = parseFloat(balanceWithoutCommas);
+
+  // Check if balanceFloat or this.percentage is not a number
+  if (isNaN(balanceFloat) || isNaN(this.percentage)) {
+    console.error('Error: Balance or percentage is not a number.');
+    return NaN; // Return NaN if either balance or percentage is not a number
+  }
+
   // Calculate buy amount based on percentage and wallet LP value
-  const calculatedAmount = (this.balance * this.percentage) / 100;
+  const calculatedAmount = (balanceFloat * this.percentage) / 100;
   console.log('Calculated amount:', calculatedAmount);
   return calculatedAmount;
 },

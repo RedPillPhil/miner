@@ -172,7 +172,7 @@ console.log('Formatted token1 value:', formattedToken1Value);
 
       this.contractInstance = new this.web3Object.eth.Contract(contractABI, contractAddress)
 
-      this.readValues(totalSupply, reserve0Adjusted)
+      this.readValues(totalSupply, reserve0Adjusted, reserve0)
     },
 readValues(totalSupply, reserve0Adjusted) {
   const web3 = new Web3('HTTP://127.0.0.1:1923 ');
@@ -210,6 +210,7 @@ readValues(totalSupply, reserve0Adjusted) {
         const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);
         this.token0ValueWithDecimals = token0ValueWithDecimals;
         console.log('token0value with decimals:', token0ValueWithDecimals);
+        console.log('totalSupply:', totalSupply);
     }
 })
 

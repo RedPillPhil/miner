@@ -212,8 +212,7 @@ async readValues(totalSupply, reserve0Adjusted) {
   } catch (error) {
     console.error('Error fetching data:', error);
   }
-}
-
+},
      
 	  
 	  bakePizza() {

@@ -134,18 +134,10 @@ calculateBuyAmount() {
   }
 
   // Calculate buy amount based on percentage and wallet LP value
-  let calculatedAmount = (balanceFloat * this.percentage) / 100;
-  
-  // Limit the number of decimal places to 2
-  calculatedAmount = parseFloat(calculatedAmount.toFixed(2));
-
-  // Add commas back to the calculated amount
-  const formattedAmount = calculatedAmount.toLocaleString();
-
-  console.log('Calculated amount:', formattedAmount);
-  return formattedAmount;
+  const calculatedAmount = (balanceFloat * this.percentage) / 100;
+  console.log('Calculated amount:', calculatedAmount);
+  return calculatedAmount;
 },
-
 
 
     async onConnect() {

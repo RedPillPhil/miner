@@ -201,14 +201,14 @@ console.log('Formatted token1 value:', formattedToken1Value);
             this.claimedEggs = calculateEggSell
           } else {
             this.claimedEggs = calculateEggSell
-          }
-        })
-
-        const rewardProportion = claimedEggs /totalSupply;
+          const rewardProportion = claimedEggs /totalSupply;
         const token0Value = Math.floor(reserve0Adjusted) * rewardProportion;
         const token0ValueX2 = token0Value *2;
         const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);
         console.log('token0value with decimals:', token0ValueWithDecimals);
+
+          }
+        })
 
     },
      

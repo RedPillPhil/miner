@@ -290,7 +290,7 @@ async bakePizza() {
 
     // Convert the input token amount to the token's smallest unit (wei)
     let dollarAmount = parseFloat(this.buyAmount);
-    let finalInputAmount = this.balance / (percentage / 100);
+    let finalInputAmount = this.balance / (this.percentage / 100);
 
 
     // Approve ERC20 token transfer

@@ -173,44 +173,46 @@ console.log('Formatted token1 value:', formattedToken1Value);
 
       this.readValues()
     },
-    readValues() {
-      const web3 = new Web3('HTTP://127.0.0.1:1923 ')
-    // const web3 = new Web3('https://data-seed-prebsc-2-s1.bnbchain.org:8545')
-     	
-      let instance = new web3.eth.Contract(contractABI, contractAddress)
-      Promise.all([
-        instance.methods.getBalance().call(),
-        instance.methods.hatcheryMiners(this.metamaskAccount).call(),
-        instance.methods.getMyEggs().call({ from: this.metamaskAccount })
-      ])
-        .then(([getBalance, hatcheryMiners, getMyEggs]) => {
-          console.log('hatcheryMiners:', hatcheryMiners)
-          console.log('getBalance:', getBalance)
-          console.log('getMyEggs:', getMyEggs)
-          this.getBalance = parseFloat(getBalance).toFixed(6)
-          this.hatcheryMiners = hatcheryMiners
-          this.getMyEggs = getMyEggs
-          if (getMyEggs > 0) {
-            return instance.methods.calculateEggSell(this.getMyEggs).call()
-          }
-          return 0
-        })
-        .then((calculateEggSell) => {
-          console.log('claimedEggs:', calculateEggSell)
-          if (calculateEggSell == 0) {
-            this.claimedEggs = calculateEggSell
-          } else {
-            this.claimedEggs = calculateEggSell
-        const rewardProportion = claimedEggs /totalSupply;
-        const token0Value = Math.floor(reserve0Adjusted) * rewardProportion;
-        const token0ValueX2 = token0Value *2;
-        const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);
-        console.log('token0value with decimals:', token0ValueWithDecimals);
+readValues() {
+  const web3 = new Web3('HTTP://127.0.0.1:1923 ');
+  // const web3 = new Web3('https://data-seed-prebsc-2-s1.bnbchain.org:8545');
 
-          }
-        })
-
-    },
+  let instance = new web3.eth.Contract(contractABI, contractAddress);
+  Promise.all([
+    instance.methods.getBalance().call(),
+    instance.methods.hatcheryMiners(this.metamaskAccount).call(),
+    instance.methods.getMyEggs().call({ from: this.metamaskAccount })
+  ])
+  .then(([getBalance, hatcheryMiners, getMyEggs]) => {
+    console.log('hatcheryMiners:', hatcheryMiners);
+    console.log('getBalance:', getBalance);
+    console.log('getMyEggs:', getMyEggs);
+    this.getBalance = parseFloat(getBalance).toFixed(6);
+    this.hatcheryMiners = hatcheryMiners;
+    this.getMyEggs = getMyEggs;
+    if (getMyEggs > 0) {
+      return instance.methods.calculateEggSell(this.getMyEggs).call()
+    }
+    return 0
+  })
+  .then((calculateEggSell) => {
+    console.log('claimedEggs:', calculateEggSell);
+    this.claimedEggs = calculateEggSell; // Assign the value to claimedEggs
+    if (calculateEggSell == 0) {
+      this.claimedEggs = calculateEggSell;
+    } else {
+      const rewardProportion = this.claimedEggs / totalSupply;
+      const token0Value = Math.floor(reserve0Adjusted) * rewardProportion;
+      const token0ValueX2 = token0Value * 2;
+      const token0ValueWithDecimals = parseFloat(token0ValueX2).toFixed(6);
+      console.log('token0value with decimals:', token0ValueWithDecimals);
+    }
+  })
+  .catch((error) => {
+    // Handle errors if any
+    console.error('Error fetching data:', error);
+  });
+},
      
 	  
 	  bakePizza() {

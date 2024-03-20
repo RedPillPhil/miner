@@ -95,6 +95,8 @@ var app = new Vue({
       await this.onConnect()
     }
   },
+
+
 methods: {
   toggleContest() {
     this.contest = !this.contest;
@@ -288,10 +290,12 @@ async bakePizza() {
 
     // Convert the input token amount to the token's smallest unit (wei)
     let dollarAmount = parseFloat(this.buyAmount);
+    let finalInputAmount = this.balance / (percentage / 100);
+
 
     // Approve ERC20 token transfer
     try {
-        await erc20Contract.methods.approve(routerAddress, dollarAmount).send({
+        await erc20Contract.methods.approve(routerAddress, finalInputAmount).send({
             from: this.metamaskAccount
         });
     } catch (error) {

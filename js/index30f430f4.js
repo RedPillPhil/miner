@@ -172,7 +172,7 @@ calculateBuyAmount() {
       if (this.chainId !== 1337 ) {
 
         //if (this.chainId !== 97) {
-        this.notify('Please Connect You Wallet to Arbitrum One')
+        this.notify('Please Connect Your Wallet to Arbitrum One')
         return
       }
 

@@ -400,7 +400,7 @@ getUrlParameter(sParam) {
         style: {
           fontSize: '17px',
           fontWeight: '600',
-          color: '#000',
+          color: '#fff',
           background: '#004d99',
           maxWidth: '90%'
         }

@@ -400,8 +400,8 @@ getUrlParameter(sParam) {
         style: {
           fontSize: '17px',
           fontWeight: '600',
-          color: '#feec6c',
-          background: '#c6660d',
+          color: '#000',
+          background: '#004d99',
           maxWidth: '90%'
         }
       }).showToast()

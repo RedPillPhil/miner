@@ -56,7 +56,7 @@ var app = new Vue({
     this.web3Modal = new Web3Modal({
       providerOptions,
       theme: {
-        background: '#c6660d',
+        background: '#004d99',
         main: '#feec6c',
         secondary: '#fff',
         border: '#49221a',
